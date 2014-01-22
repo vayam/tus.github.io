@@ -1,0 +1,153 @@
+body {
+  padding-bottom: 40px;
+}
+/* Custom container */
+.container-narrow {
+  margin: 0 auto;
+  max-width: 700px;
+}
+.container-narrow > hr {
+  margin: 30px 0;
+}
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+}
+.jumbotron h1 {
+  font-size: 60px;
+  line-height: 1;
+  margin-bottom: 30px;
+}
+.jumbotron .btn,
+.jumbotron input {
+  font-size: 19px;
+  padding: 14px 14px;
+}
+.jumbotron .input {
+  line-height: 25px;
+  text-align: center;
+}
+/* Supporting marketing content */
+.marketing {
+  margin: 60px 0;
+}
+.marketing p + h4 {
+  margin-top: 28px;
+}
+.people > div {
+  margin-right: 44px;
+  float: left;
+}
+.people > div img {
+  border: 1px solid #666;
+}
+.people > div h3 {
+  font-size: 16px;
+  text-align: center;
+}
+.people > div:last-child {
+  margin: 0;
+}
+input[type="file"] {
+  line-height: 100%;
+  height: auto;
+}
+.progress,
+.download {
+  display: none;
+}
+h3 {
+  margin: 20px 0 10px 0;
+  line-height: 40px;
+}
+#posts {
+  list-style-type: none;
+  padding: 0;
+  margin: 0 0 0 5px;
+}
+#posts img {
+  float: left;
+  margin: 0;
+}
+#posts p {
+  display: inline-block;
+  float: left;
+  margin: 0;
+  width: 550px;
+}
+#posts span.timeago {
+  position: absolute;
+  right: 0;
+  float: left;
+  width: 90px;
+  text-align: right;
+}
+#posts > li {
+  border-bottom: 1px solid #eee;
+  padding: 5px 0;
+  clear: both;
+  position: relative;
+}
+#posts > li:last-child {
+  border-bottom: none;
+}
+#posts .gravatar {
+  margin-right: 7px;
+}
+#posts .commits {
+  display: none;
+  clear: both;
+  padding-top: 5px;
+}
+#posts .commits li {
+  list-style-type: none;
+  margin-left: 10px;
+  font-size: 12px;
+}
+#posts .commits li a {
+  display: inline-block;
+  width: 50px;
+  text-align: right;
+  margin-right: 3px;
+}
+#posts > li:hover .commits {
+  display: block;
+}
+img.gravatar {
+  border-radius: 10px;
+  width: 20px;
+  height: 20px;
+}
+.muted a {
+  color: #999;
+}
+h3.logo {
+  line-height: 30px;
+}
+.nav {
+  margin-bottom: 0;
+}
+.protocol {
+  font-family: Courier New, monospace;
+}
+.protocol code {
+  color: inherit;
+  background: none;
+  border: none;
+}
+.protocol h1 {
+  font-size: 30px;
+}
+.protocol h2 {
+  font-size: 20px;
+}
+.protocol h3 {
+  font-size: 15px;
+}
+.protocol ol {
+  list-style-type: none;
+}
+.twitter-follow-btn {
+  text-align: center;
+  margin-left: 300px;
+}

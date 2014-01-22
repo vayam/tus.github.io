@@ -1,0 +1,167 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>Nodecopter Cloud Store</title>
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+    <link href="http://feeds.feedburner.com/tusio" type="application/rss+xml" rel="alternate" title="Posts">
+  </head>
+  <body>
+
+    
+    
+    
+
+    <a target="_blank" href="https://github.com/tus"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 10;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div class="container-narrow">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          
+            
+            
+            <li class=""><a href="/index.html">Home</a></li>
+          
+            
+            
+            <li class=""><a href="/about.html">About</a></li>
+          
+            
+            
+            <li class=""><a href="/blog.html">Blog</a></li>
+          
+            
+            
+            <li class=""><a href="/demo.html">Demo</a></li>
+          
+            
+            
+            <li class=""><a href="/protocols/resumable-upload.html">Protocol</a></li>
+          
+            
+            
+            <li class=""><a href="/implementations.html">Implementations</a></li>
+          
+        </ul>
+        <h3 class="muted logo"><a href="/">tus</a></h3>
+      </div>
+      <hr>
+      <div class="jumbotron">
+  <img src="/assets/img/nodecopter-cloud-store.jpg" width="256"/>
+  <h1>Nodecopter Cloud Store</h1>
+  <p class="lead">Taking your files to the cloud - literally.</p>
+
+  <iframe width="600" height="337" src="http://www.youtube.com/embed/vwnnhGi8lAY" frameborder="0"></iframe>
+</div>
+
+
+<hr>
+
+<h3>Demo</h3>
+
+<ol>
+  <li>Download the <a href="/tusd-nodecopter-edition">tusd-nodecopter-edition</a> ARM binary.</li>
+  <li>Connect to your AR Drone WiFi Network</li>
+  <li>Upload the the binary: <code>curl -T tusd-nodecopter-edition ftp://192.168.1.1/</code></li>
+  <li><code>telnet 192.168.1.1</code>, then run: <code>/data/video/tusd-nodecopter-edition</code></li>
+  <li>Use the input below to select a file and watch it upload to your drone!</li>
+</ol>
+
+<form id="js_upload">
+  <input class="js_file" name="upload" type="file" />
+</form>
+
+<div class="progress progress-striped active">
+  <div class="bar js_progress"></div>
+</div>
+
+<a class="btn btn-success download js_download">Download</a>
+
+<script type="text/javascript">
+  window.tusdEndpoint = 'http://192.168.1.1:1080';
+</script>
+<script type="text/javascript" src="/js/jquery.js"></script>
+<script type="text/javascript" src="/js/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+<script type="text/javascript" src="/js/jquery-file-upload/js/jquery.fileupload.js"></script>
+<script type="text/javascript" src="/js/main.js"></script>
+
+<h3>FAQ</h3>
+
+<h4>Does it scale?</h4>
+
+<p>
+Yes! tusd-nodecopter-edition can be scaled horizontally by launching additional
+drones, and vertically by flying them on top of each other. For additional
+scalability you can use the <a href="https://github.com/felixge/node-ar-drone">node.js ardrone
+  library</a> - as node.js will automatically take care of all the scaling. If
+you need more storage for your individual drones, you can hook up a USB stick
+and mount it on your drone:
+</p>
+
+<pre>
+<code>mkdir /mnt/usb
+mount -t vfat -o rw,users /dev/sda1 /mnt/usb</code>
+</pre>
+
+<h4>Is it safe?</h4>
+
+<p>Yes, clouds are a great place to hide your data, as attackers will be
+unable find your drones. And even if they do find one or more of your drones,
+you can simply fly them to a different location!</p>
+
+<h4>How much does it cost?</h4>
+
+<p>We are still doing the math on this, but we are confident that the economies
+of scale will allow us to drive down storage cost significantly over time!</p>
+
+<h4>Can you notify me when it's ready?</h4>
+
+<p>Of course, just leave your email and we'll keep you posted about tus related
+developments:</p>
+
+<div class="input-append control-group">
+  <form action="http://transloadit.us1.list-manage1.com/subscribe/post?u=98e560c614f2baaf47237f500&amp;id=37aafbe5c1" method="post">
+    <input name="EMAIL" class="input-xlarge" type="email" placeholder="your email"/>
+    <input name="SOURCE" type="hidden" value="tus.io"/>
+    <button class="btn btn-success">Keep me posted</button>
+  </form>
+</div>
+
+      <hr>
+
+      
+
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-3306079-17']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+
+    <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+    <script src="/assets/js/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/assets/js/jquery-file-upload/js/jquery.fileupload.js"></script>
+    <script src="/assets/js/jquery.tus.js"></script>
+    <script type="text/javascript">
+      window.tusdEndpoint = '';
+    </script>
+    <script type="text/javascript">
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips:
+      $('a[rel]').tooltip();
+    </script>
+    <script src="/assets/js/upload-demo.js"></script>
+  </body>
+</html>

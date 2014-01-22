@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="UTF-8">
+    <title>HTTP Protocol</title>
+
+    <link rel="shortcut icon" href="/assets/img/favicon.ico">
+    <link href="/assets/bootstrap/css/bootstrap.css" rel="stylesheet" media="screen">
+    <link href="/assets/css/main.css" rel="stylesheet" type="text/css" />
+    <link href="//kvz.github.io/on-the-githubs/css/on-the-githubs.min.css" rel="stylesheet" />
+    <link href="http://feeds.feedburner.com/tusio" type="application/rss+xml" rel="alternate" title="Posts">
+  </head>
+  <body>
+
+    
+    
+    
+
+    <a target="_blank" href="https://github.com/tus"><img style="position: absolute; top: 0; right: 0; border: 0; z-index: 10;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_gray_6d6d6d.png" alt="Fork me on GitHub"></a>
+    <div class="container-narrow">
+      <div class="masthead">
+        <ul class="nav nav-pills pull-right">
+          
+            
+            
+            <li class=""><a href="/index.html">Home</a></li>
+          
+            
+            
+            <li class=""><a href="/about.html">About</a></li>
+          
+            
+            
+            <li class=""><a href="/blog.html">Blog</a></li>
+          
+            
+            
+            <li class=""><a href="/demo.html">Demo</a></li>
+          
+            
+            
+            <li class=""><a href="/protocols/resumable-upload.html">Protocol</a></li>
+          
+            
+            
+            <li class=""><a href="/implementations.html">Implementations</a></li>
+          
+        </ul>
+        <h3 class="muted logo"><a href="/">tus</a></h3>
+      </div>
+      <hr>
+      <h2>HTTP Protocol</h2>
+
+<p><strong>Status:</strong> Work in progress</p>
+
+<p>Part of the tus mission is to create a simple protocol for http file uploads
+that supports the following features:</p>
+
+<ul>
+<li>Resumable file uploads</li>
+<li>Multiple upload connections per file</li>
+<li>File meta data</li>
+<li>Cross domain uploads</li>
+<li>Legacy clients / multipart uploads</li>
+</ul>
+
+<p>Ideally this will be accomplished in the spirit of REST while avoiding the
+custom headers and http status codes used by other protocols.</p>
+
+<p><strong>Prior art:</strong></p>
+
+<ul>
+<li><a href="https://developers.google.com/youtube/v3/guides/using_resumable_upload_protocol">YouTube Data API - Resumable Upload</a></li>
+<li><a href="https://developers.google.com/drive/manage-uploads">Google Drive - Upload Files</a></li>
+<li><a href="https://developers.google.com/gdata/docs/resumable_upload">Resumable Media Uploads in the Google Data Protocol</a> (deprecated)</li>
+<li><a href="http://code.google.com/p/gears/wiki/ResumableHttpRequestsProposal">ResumableHttpRequestsProposal from Gears</a> (deprecated)</li>
+</ul>
+
+<h3>POST /files</h3>
+
+<p>Used to create a resumable file upload. You may send parts or all of your file
+along with this request, but this is discouraged as you will not be able to
+resume the request if something goes wrong.</p>
+
+<p><strong>Request Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">POST /files HTTP/1.1
+Host: tus.example.com
+Content-Length: 0
+Content-Range: bytes */100
+Content-Type: image/jpg
+Content-Disposition: attachment; filename=&quot;me.jpg&quot;&#39;
+</code></pre></div><div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;empty body&gt;
+</code></pre></div>
+<p><strong>Response Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 201 Created
+Location: http://tus.example.com/files/24e533e02ec3bc40c387f1a0e460e216
+Content-Length: 0
+Content-Type: image/jpg
+Content-Disposition: attachment; filename=&quot;me.jpg&quot;&#39;
+</code></pre></div>
+<p>The <code>Location</code> header returns the <code>&lt;fileUrl&gt;</code> to use for interacting with the
+file upload.</p>
+
+<h3>PUT &lt;fileUrl&gt;</h3>
+
+<p><strong>Request Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">PUT /files/24e533e02ec3bc40c387f1a0e460e216 HTTP/1.1
+Host: tus.example.com
+Content-Length: 100
+Content-Range: bytes 0-99/100
+</code></pre></div><div class="highlight"><pre><code class="text language-text" data-lang="text">&lt;bytes 0-99&gt;
+</code></pre></div>
+<p><strong>Response Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 200 Ok
+Content-Type: image/jpg
+Content-Disposition: attachment; filename=&quot;me.jpg&quot;&#39;
+Range: bytes=0-99
+Content-Length: 0
+</code></pre></div>
+<h3>HEAD &lt;fileUrl&gt;</h3>
+
+<p><strong>Request Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HEAD /files/24e533e02ec3bc40c387f1a0e460e216 HTTP/1.1
+Host: tus.example.com
+</code></pre></div>
+<p><strong>Response Example:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 200 Ok
+Content-Length: 100
+Content-Type: image/jpg
+Content-Disposition: attachment; filename=&quot;me.jpg&quot;&#39;
+Range: bytes=0-20,40-99
+</code></pre></div>
+<p>The <code>Range</code> header holds a <a href="http://www.w3.org/Protocols/rfc2616/rfc2616-sec14.html#sec14.35.1">byte
+range</a> that
+informs the client which parts of the file have been received so far. It is
+up to the client to choose appropriate <code>PUT</code> requests to complete the upload.</p>
+
+<p>A completed upload will be indicated by a single range covering the entire file
+size (e.g. <code>Range: bytes=0-99</code> for a 100 byte file).</p>
+
+<h3>GET &lt;fileUrl&gt;</h3>
+
+<p>Used to download an uploaded file.</p>
+
+<p><strong>Request:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">GET /files/24e533e02ec3bc40c387f1a0e460e216 HTTP/1.1
+Host: tus.example.com
+</code></pre></div>
+<p><strong>Response:</strong></p>
+<div class="highlight"><pre><code class="text language-text" data-lang="text">HTTP/1.1 200 Ok
+Content-Length: 100
+Content-Type: image/jpg
+Content-Disposition: attachment; filename=&quot;me.jpg&quot;&#39;
+</code></pre></div><div class="highlight"><pre><code class="text language-text" data-lang="text">[file data]
+</code></pre></div>
+<h2>Todo</h2>
+
+<ul>
+<li>Custom meta data</li>
+<li>Multipart uploads</li>
+</ul>
+
+      <hr>
+
+      
+
+    </div>
+    <script type="text/javascript">
+      var _gaq = _gaq || [];
+      _gaq.push(['_setAccount', 'UA-3306079-17']);
+      _gaq.push(['_trackPageview']);
+
+      (function() {
+        var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+        ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+        var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+      })();
+    </script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script src="/assets/bootstrap/js/bootstrap.js"></script>
+
+    <script src="//kvz.github.io/on-the-githubs/js/jquery.on-the-githubs.min.js"></script>
+
+    <script src="/assets/js/jquery-file-upload/js/vendor/jquery.ui.widget.js"></script>
+    <script src="/assets/js/jquery-file-upload/js/jquery.fileupload.js"></script>
+    <script src="/assets/js/jquery.tus.js"></script>
+    <script type="text/javascript">
+      window.tusdEndpoint = '';
+    </script>
+    <script type="text/javascript">
+      $('.on-the-githubs').onthegithubs();
+      // If you use bootstrap and want to enable tooltips:
+      $('a[rel]').tooltip();
+    </script>
+    <script src="/assets/js/upload-demo.js"></script>
+  </body>
+</html>
